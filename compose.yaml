@@ -1,0 +1,18 @@
+services:
+  sungrow:
+    image: "11notes/sungrow:3.0.7"
+    container_name: "sungrow"
+    environment:
+      TZ: "Europe/Zurich"
+      GOSUNGROW_USER: "user"
+      GOSUNGROW_PASSWORD: "*********************"
+      GOSUNGROW_HOST: "https://gateway.isolarcloud.eu"
+      GOSUNGROW_MQTT_USER: "user"
+      GOSUNGROW_MQTT_PASSWORD: "*********************"
+      GOSUNGROW_MQTT_HOST: "10.255.255.83"
+      GOSUNGROW_MQTT_PORT: 8883
+    volumes:
+      - "etc:/sungrow/etc"
+    restart: always
+volumes:
+  etc:

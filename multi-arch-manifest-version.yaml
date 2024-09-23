@@ -1,0 +1,11 @@
+image: 11notes/sungrow:3.0.7
+manifests:
+  - image: 11notes/sungrow:3.0.7
+    platform:
+      architecture: amd64
+      os: linux
+  - image: 11notes/sungrow:3.0.7
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8
