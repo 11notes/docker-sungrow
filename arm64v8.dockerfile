@@ -11,6 +11,7 @@
 
 # :: Build
   FROM --platform=linux/arm64 golang:alpine as build
+  COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin
   ARG BUILD_VERSION=3.0.7
   ARG BUILD_ROOT=/go/GoSungrow
 
