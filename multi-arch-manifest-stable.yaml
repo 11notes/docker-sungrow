@@ -1,10 +1,10 @@
-image: 11notes/sungrow:3.0.7
+image: 11notes/sungrow:stable
 manifests:
-  - image: 11notes/sungrow:amd64-3.0.7
+  - image: 11notes/sungrow:amd64-stable
     platform:
       architecture: amd64
       os: linux
-  - image: 11notes/sungrow:arm64v8-3.0.7
+  - image: 11notes/sungrow:arm64v8-stable
     platform:
       architecture: arm64
       os: linux
