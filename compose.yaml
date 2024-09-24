@@ -7,10 +7,11 @@ services:
       GOSUNGROW_USER: "user"
       GOSUNGROW_PASSWORD: "*********************"
       GOSUNGROW_HOST: "https://gateway.isolarcloud.eu"
+      GOSUNGROW_MQTT_HOST: "mqtt.domain.com"
       GOSUNGROW_MQTT_USER: "user"
       GOSUNGROW_MQTT_PASSWORD: "*********************"
-      GOSUNGROW_MQTT_HOST: "10.255.255.83"
       GOSUNGROW_MQTT_PORT: 8883
+      GOSUNGROW_MQTT_TOPIC: "mqtt.domain.com/home/solar/sungrow"
     volumes:
       - "etc:/sungrow/etc"
     restart: always

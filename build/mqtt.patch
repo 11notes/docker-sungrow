@@ -1,0 +1,61 @@
+diff --git a/cmdHassio/struct.go b/cmdHassio/struct.go
+index 335ca822..152b170c 100644
+--- a/cmdHassio/struct.go
++++ b/cmdHassio/struct.go
+@@ -11,6 +11,8 @@ import (
+        "net/url"
+        "strings"
+        "time"
++       "crypto/tls"
++       "os"
+ )
+
+
+@@ -50,7 +52,7 @@ func New(req Mqtt) *Mqtt {
+
+        for range Only.Once {
+                ret = Mqtt {
+-                       ClientId:       req.ClientId,
++                       ClientId:       os.Getenv("GOSUNGROW_MQTT_CLIENT_ID"),
+                        Username:       req.Username,
+                        Password:       req.Password,
+                        Host:           req.Host,
+@@ -66,7 +68,7 @@ func New(req Mqtt) *Mqtt {
+                        SungrowDevices: nil,
+                        SungrowPsIds:   make(map[valueTypes.PsId]bool),
+                        MqttDevices:    make(map[string]Device),
+-                       Prefix:         "homeassistant",
++                       Prefix:         os.Getenv("GOSUNGROW_MQTT_TOPIC"),
+                        UserOptions:    Options{},
+                        token:          nil,
+                        firstRun:       true,
+@@ -310,14 +312,23 @@ func (m *Mqtt) Disconnect() error {
+        return m.err
+ }
+
++func NewTLSConfig() *tls.Config {
++       return &tls.Config{
++               InsecureSkipVerify: false,
++       }
++}
++
+ func (m *Mqtt) createClientOptions() error {
+        for range Only.Once {
++               tlsconfig := NewTLSConfig()
++
+                m.clientOptions = mqtt.NewClientOptions()
+-               m.clientOptions.AddBroker(fmt.Sprintf("tcp://%s", m.url.Host))
++               m.clientOptions.AddBroker(fmt.Sprintf("ssl://%s", m.url.Host))
+                m.clientOptions.SetUsername(m.url.User.Username())
+                password, _ := m.url.User.Password()
+                m.clientOptions.SetPassword(password)
+                m.clientOptions.SetClientID(m.ClientId)
++               m.clientOptions.SetTLSConfig(tlsconfig)
+
+                m.clientOptions.WillTopic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, "state")
+                m.clientOptions.WillPayload = []byte("OFF")
+@@ -456,3 +467,4 @@ func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name s
+ //
+ //     return ret
+ // }
++

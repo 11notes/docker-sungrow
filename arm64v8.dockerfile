@@ -32,13 +32,15 @@
     cd /;\
     git clone https://github.com/MickMake/GoUnify.git;
 
+  COPY ./build /
+
   RUN set -ex; \
     cd ${BUILD_ROOT}; \
     git remote add -t encryption triamazikamno https://github.com/triamazikamno/GoSungrow.git; \
     git pull triamazikamno encryption; \
     git switch encryption; \
-    go mod tidy; \
-    go build -o /usr/local/bin;
+    git apply --reject --ignore-space-change --ignore-whitespace /mqtt.patch; \
+    go mod tidy;
 
 # :: Header
   FROM --platform=linux/arm64 11notes/alpine:stable
@@ -50,6 +52,8 @@
   ENV APP_ROOT=/sungrow
   ENV HOME=/sungrow/etc
   ENV GOSUNGROW_APPKEY=B0455FBE7AA0328DB57B59AA729F05D8
+  ENV GOSUNGROW_MQTT_CLIENT_ID="GoSungrow"
+  ENV GOSUNGROW_MQTT_TOPIC="mqtt"
 
   # :: Run
     USER root
@@ -78,7 +82,7 @@
   VOLUME ["${APP_ROOT}/etc"]
 
 # :: Monitor
-  HEALTHCHECK --interval=5s --timeout=2s CMD /usr/local/bin/healthcheck.sh || exit 1
+  HEALTHCHECK CMD /usr/local/bin/healthcheck.sh || exit 1
 
 # :: Start
   USER docker

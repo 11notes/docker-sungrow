@@ -3,10 +3,10 @@
 # 🏔️ Alpine - SunGrow
 ![size](https://img.shields.io/docker/image-size/11notes/sungrow/3.0.7?color=0eb305) ![version](https://img.shields.io/docker/v/11notes/sungrow/3.0.7?color=eb7a09) ![pulls](https://img.shields.io/docker/pulls/11notes/sungrow?color=2b75d6)
 
-**Use GoSungrow with MQTT**
+**Use GoSungrow with MQTT via SSL**
 
 # SYNOPSIS
-What can I do with this? This image will let you run GoSungrow and export all data via MQTT to whatever backend you run.
+What can I do with this? This image will let you run GoSungrow and export all data via MQTT to whatever backend you run. To increase security this image will by default run via SSL and validate the certificate presented. Do not use with self-signed certificates.
 
 # VOLUMES
 * **/sungrow/etc** - Directory of .GoSungrow/config.json
@@ -22,10 +22,11 @@ services:
       GOSUNGROW_USER: "user"
       GOSUNGROW_PASSWORD: "*********************"
       GOSUNGROW_HOST: "https://gateway.isolarcloud.eu"
+      GOSUNGROW_MQTT_HOST: "mqtt.domain.com"
       GOSUNGROW_MQTT_USER: "user"
       GOSUNGROW_MQTT_PASSWORD: "*********************"
-      GOSUNGROW_MQTT_HOST: "10.255.255.83"
       GOSUNGROW_MQTT_PORT: 8883
+      GOSUNGROW_MQTT_TOPIC: "mqtt.domain.com/home/solar/sungrow"
     volumes:
       - "etc:/sungrow/etc"
     restart: always
@@ -46,7 +47,9 @@ volumes:
 | --- | --- | --- |
 | `TZ` | [Time Zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) | |
 | `DEBUG` | Show debug information | |
-| `GOSUNGROW_****` | All available GoSungrow variables | |
+| `GOSUNGROW_MQTT_CLIENT_ID` | MQTT client id | "GoSungrow" |
+| `GOSUNGROW_MQTT_TOPIC` | MQTT topic used | "mqtt" |
+| `GOSUNGROW_****` | All other available GoSungrow variables | |
 
 # SOURCE
 * [11notes/sungrow](https://github.com/11notes/docker-sungrow)
