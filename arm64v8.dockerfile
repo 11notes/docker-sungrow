@@ -39,7 +39,7 @@
     git remote add -t encryption triamazikamno https://github.com/triamazikamno/GoSungrow.git; \
     git pull triamazikamno encryption; \
     git switch encryption; \
-    git apply --reject --ignore-space-change --ignore-whitespace /mqtt.patch; \
+    git apply --reject --ignore-space-change --ignore-whitespace /GoSungrow.patch; \
     go mod tidy;
 
 # :: Header
@@ -54,6 +54,7 @@
   ENV GOSUNGROW_APPKEY=B0455FBE7AA0328DB57B59AA729F05D8
   ENV GOSUNGROW_MQTT_CLIENT_ID="GoSungrow"
   ENV GOSUNGROW_MQTT_TOPIC="mqtt"
+  ENV GOSUNGROW_MQTT_CRON="*/5 * * * *"
 
   # :: Run
     USER root

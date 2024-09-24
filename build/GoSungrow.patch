@@ -59,3 +59,25 @@ index 335ca822..152b170c 100644
  //     return ret
  // }
 +
+diff --git a/cmd/cmd_mqtt.go b/cmd/cmd_mqtt.go
+index 8e1d37d9..bc3a5726 100644
+--- a/cmd/cmd_mqtt.go
++++ b/cmd/cmd_mqtt.go
+@@ -18,6 +18,7 @@ import (
+ 	"regexp"
+ 	"strings"
+ 	"time"
++	"os"
+ )
+ 
+ 
+@@ -303,7 +304,7 @@ func (c *CmdMqtt) CmdMqttRun(_ *cobra.Command, _ []string) error {
+ func (c *CmdMqtt) CmdMqttSync(_ *cobra.Command, args []string) error {
+ 	for range Only.Once {
+ 		// */1 * * * * /dir/command args args
+-		cronString := "*/5 * * * *"
++		cronString := os.Getenv("GOSUNGROW_MQTT_CRON")
+ 		if len(args) > 0 {
+ 			cronString = strings.Join(args[0:5], " ")
+ 			cronString = strings.ReplaceAll(cronString, ".", "*")
++
