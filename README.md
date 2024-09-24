@@ -49,6 +49,7 @@ volumes:
 | `DEBUG` | Show debug information | |
 | `GOSUNGROW_MQTT_CLIENT_ID` | MQTT client id | "GoSungrow" |
 | `GOSUNGROW_MQTT_TOPIC` | MQTT topic used | "mqtt" |
+| `GOSUNGROW_MQTT_CRON` | MQTT sync interval (must be equal or more than 5 minutes) | "*/5 * * * *" |
 | `GOSUNGROW_****` | All other available GoSungrow variables | |
 
 # SOURCE
