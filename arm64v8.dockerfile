@@ -12,6 +12,7 @@
 # :: Build
   FROM --platform=linux/arm64 golang:alpine as build
   COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin
+  COPY --from=util /util/linux/shell/elevenGoModCVE /usr/local/bin
   ARG BUILD_VERSION=3.0.7
   ARG BUILD_ROOT=/go/GoSungrow
 
@@ -33,14 +34,27 @@
     git clone https://github.com/MickMake/GoUnify.git;
 
   COPY ./build /
-
+  
   RUN set -ex; \
     cd ${BUILD_ROOT}; \
     git remote add -t encryption triamazikamno https://github.com/triamazikamno/GoSungrow.git; \
     git pull triamazikamno encryption; \
     git switch encryption; \
-    git apply --reject --ignore-space-change --ignore-whitespace /GoSungrow.patch; \
+    git apply --reject --ignore-space-change --ignore-whitespace /GoSungrow.patch;
+  
+  RUN set -ex; \
+    cd ${BUILD_ROOT}; \
+    chmod +x -R /usr/local/bin; \
+    elevenGoModCVE \
+      "golang.org/x/net|v0.23.0|CVE-2023-45288/CVE-2023-44487/CVE-2023-39325" \
+      "golang.org/x/crypto|v0.17.0|CVE-2023-45288/CVE-2023-48795" \
+      "golang.org/x/image|v0.18.0|CVE-2023-36308/CVE-2024-24792" \
+      "github.com/gomarkdown/markdown|v0.0.0-20230922105210-14b16010c2ee|CVE-2023-42821"; \
     go mod tidy;
+
+  RUN set -ex; \
+    cd ${BUILD_ROOT}; \
+    go build -o /usr/local/bin;
 
 # :: Header
   FROM --platform=linux/arm64 11notes/alpine:stable
